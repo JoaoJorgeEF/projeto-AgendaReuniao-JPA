@@ -248,15 +248,14 @@ public class Fachada {
 		}
 		
 		for (Participante p : r.getParticipantes()) {
-			DAO.begin();
 			p.remover(r);
+			r.remover(p);
 			DAOParticipante.update(p);
-			DAO.commit();
 		}
 		
 		DAOReuniao.delete(r);
 		DAO.commit();
-
+		
 		//enviar email para todos os participantes
 		for (Participante p : r.getParticipantes()) 
 			enviarEmail(p.getEmail(), "reuniao cancelada", "data:+"+r.getDatahora()+" e assunto:"+r.getAssunto());
@@ -265,27 +264,36 @@ public class Fachada {
 
 	public static void apagarParticipante(String nome) throws Exception {
 		nome = nome.trim();
-
-		DAO.begin();
-
 		Participante p = DAOParticipante.read(nome);
 		if (p==null) {
 			DAO.rollback();
 			throw new Exception("Participante " + nome + " nao cadastrado(a)");
 		}
-
-		for (Reuniao r : p.getReunioes()){
-
-			r.remover(p);
-			DAOReuniao.update(r);
+		if (p.getReunioes().size() > 1) {
+			for (Reuniao r : p.getReunioes()){
+				DAO.begin();
+				r.remover(p);
+				DAOReuniao.update(r);
+				DAO.begin();
 			
+			DAO.begin();
+			DAOParticipante.delete(p);
+			DAO.commit();
+			}
+		} else {
+			DAO.begin();
+			for (Reuniao r : p.getReunioes()){
+				r.remover(p);
+				DAOReuniao.update(r);
+			}
+			DAOParticipante.delete(p);
+			DAO.commit();
+		}
+
+		for (Reuniao r : p.getReunioes()) {
 			if (r.getParticipantes().size() < 2)
 				cancelarReuniao(r.getId());
 		}
-
-		DAOParticipante.delete(p);
-		DAO.commit();
-
 		//enviar email para o participante apagado
 		enviarEmail(p.getEmail()," descadastro ",  "Voce foi excluido da agenda");
 	}	

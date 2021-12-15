@@ -34,10 +34,8 @@ public class DAOReuniao extends DAO<Reuniao> {
 	public List<Reuniao> consultarConvidado() {
 		try {
 			TypedQuery<Reuniao> q = manager.createQuery (
-					"SELECT r" +
-					"FROM Reuniao r JOIN r.Convidado c" +
-					"WHERE c.nome is not empty",Reuniao.class
-					);
+					"SELECT distinct r " +
+					"FROM Convidado c JOIN c.reunioes r ",Reuniao.class);
 			return q.getResultList();
 		} catch(Exception e){
 			return null;

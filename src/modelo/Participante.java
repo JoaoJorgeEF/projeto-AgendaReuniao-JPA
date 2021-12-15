@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
+import javax.persistence.Version;
 
 /**********************************
  * IFPB - Curso Superior de Tec. em Sist. para Internet
@@ -31,8 +32,13 @@ public class Participante {
 	private String nome; 
 	private String email;
 	
-	@ManyToMany(cascade= CascadeType.ALL,
-				fetch= FetchType.LAZY)
+	@Version
+	private long versao;
+	
+	@ManyToMany(cascade= {
+							CascadeType.MERGE,
+							},
+				fetch= FetchType.EAGER)
 	private List <Reuniao> reunioes = new ArrayList <Reuniao> ();
 
 	public Participante(String nome, String email) 	{

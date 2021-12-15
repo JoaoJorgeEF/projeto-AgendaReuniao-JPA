@@ -27,20 +27,16 @@ public class DAOParticipante extends DAO<Participante> {
 		return q.getResultList();
 	}
 
-	public List<Participante> consultarParticipante(String nome, int mes) {
+	public List<Participante> consultarParticipante(String nome, int mes){
 		try {
-			TypedQuery<Participante> q = manager.createQuery (
-					"SELECT p FROM Participante p WHERE p.nome LIKE :x " +
-					"AND p.Reuniao.datahora LIKE :m",Participante.class
-					);
-
-			q.setParameter("x", "N%");
-			q.setParameter("m", "M%");
+			TypedQuery<Participante> q = manager.createQuery("select distinct p from Participante p join fetch p.reunioes r where substring(cast(r.datahora as text),6,2)= :m " + 
+															"and p.nome= :n",Participante.class);
+			q.setParameter("m", Integer.toString(mes));
+			q.setParameter("n", nome);
 			return q.getResultList();
-		} catch(Exception e) {
+		} catch(NoResultException e) {
 			return null;
 		}
-		
 	}
 
 }

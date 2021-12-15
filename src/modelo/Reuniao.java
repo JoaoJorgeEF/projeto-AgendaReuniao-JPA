@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Version;
 
 /**********************************
  * IFPB - Curso Superior de Tec. em Sist. para Internet
@@ -30,9 +31,14 @@ public class Reuniao {
 	private LocalDateTime datahora;
 	private String assunto;
 	
+	@Version
+	private long versao;
+	
 	@ManyToMany(mappedBy="reunioes", 
-				cascade= CascadeType.ALL,
-				fetch= FetchType.LAZY)
+				cascade= {
+							CascadeType.MERGE,
+							},
+				fetch= FetchType.EAGER)
 	private List <Participante> participantes = new ArrayList <Participante>();
 
 	public Reuniao(LocalDateTime datahora, String assunto) 	{

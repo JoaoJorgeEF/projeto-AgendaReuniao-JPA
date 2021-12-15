@@ -14,8 +14,8 @@ public class Consultar {
 			for(Participante p : Fachada.consultaA("jose", 12))   //P=jose e M=12
 				System.out.println(p);
 
-			System.out.println("\nQuais as reuni√µes que tem algum convidado");
-			for(Reuniao r : Fachada.consultaB()) 		//M=12
+			System.out.println("\nQuais as reuniıes que tem algum convidado");
+			for(Reuniao r : Fachada.consultaB())
 				System.out.println(r);
 
 		} 
