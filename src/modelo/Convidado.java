@@ -12,7 +12,7 @@ import org.hibernate.annotations.PolymorphismType;
  **********************************/
 
 @Entity
-@Polymorphism(type = PolymorphismType.EXPLICIT)
+//@Polymorphism(type = PolymorphismType.EXPLICIT)
 public class Convidado extends Participante {
 	private String empresa; 
 

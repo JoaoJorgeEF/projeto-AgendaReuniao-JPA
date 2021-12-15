@@ -34,8 +34,7 @@ public class Reuniao {
 	@Version
 	private long versao;
 	
-	@ManyToMany(mappedBy="reunioes", 
-				cascade= {
+	@ManyToMany(cascade= {
 							CascadeType.MERGE,
 							},
 				fetch= FetchType.EAGER)

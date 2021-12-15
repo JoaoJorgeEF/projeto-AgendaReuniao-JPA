@@ -35,9 +35,8 @@ public class Participante {
 	@Version
 	private long versao;
 	
-	@ManyToMany(cascade= {
-							CascadeType.MERGE,
-							},
+	@ManyToMany(mappedBy="participantes",
+				cascade= {CascadeType.MERGE},
 				fetch= FetchType.EAGER)
 	private List <Reuniao> reunioes = new ArrayList <Reuniao> ();
 
